@@ -1,2 +1,5 @@
 data/*.pkl
 data/*
+
+.ipynb_checkpoints/
+.vim/
