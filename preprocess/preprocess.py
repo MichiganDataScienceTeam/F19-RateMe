@@ -7,15 +7,17 @@ from pandas.io.json import json_normalize
 
 
 def clean_title(x):
-    tag = r"\b((\d{1,2})[\s\(\),\/-]*([mf]|female|male))\b|\b(([mf]|female|male)[\s\(\),\/-]*(\d{1,2}))\b"
+    tag = r"\b((\d{1,2})[\s\(\)\[\],\/-]*([mf]|female|male))\b|\b(([mf]|female|male)[\s\(\)\[\],\/-]*(\d{1,2}))\b"
     age = r"\d{1,2}"
     gender = r"(\b|\d)([mMfF])"
     match = re.search(tag, x, flags=re.I)
     if match:
         matched = match.group(0)
-        extracted_age = re.search(age, matched).group(0)
+        extracted_age = int(re.search(age, matched).group(0))
         extracted_gender = re.search(gender, matched).group(2)
-        return int(extracted_age), extracted_gender
+        if extracted_age < 18:
+            return None, None
+        return extracted_age, extracted_gender
     return None, None
 
 
