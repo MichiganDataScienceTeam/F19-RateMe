@@ -14,7 +14,7 @@ def clean_title(x):
     if match:
         matched = match.group(0)
         extracted_age = int(re.search(age, matched).group(0))
-        extracted_gender = re.search(gender, matched).group(2)
+        extracted_gender = re.search(gender, matched).group(2).upper()
         if extracted_age < 18:
             return None, None
         return extracted_age, extracted_gender
