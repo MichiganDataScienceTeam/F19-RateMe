@@ -2,7 +2,6 @@ import argparse
 import pickle as pkl
 import re
 
-import pandas as pd
 from pandas.io.json import json_normalize
 
 
@@ -115,5 +114,4 @@ if __name__ == "__main__":
         default="../data/comments.csv",
         help="output path of comments csv",
     )
-    args = parser.parse_args()
-    main(args)
+    main(parser.parse_args())
