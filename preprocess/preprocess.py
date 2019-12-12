@@ -56,10 +56,17 @@ def main(args):
             "gilded",
             "score",
             "selftext",
-            "total_awards_received",
+            "created_utc"
         ]
     ]
+    posts_df = posts_df.drop_duplicates(subset=["id"])
     posts_df = posts_df.set_index("id")
+    posts_df["title"] = posts_df["title"].str.replace("\n", " ")
+    posts_df["title"] = posts_df["title"].str.replace("\r", " ")
+    posts_df["selftext"] = posts_df["selftext"].str.replace("\n", " ")
+    posts_df["selftext"] = posts_df["selftext"].str.replace("\r", " ")
+    posts_df["title"] = posts_df["title"].fillna("")
+    posts_df["selftext"] = posts_df["selftext"].fillna("")
     age_gender = posts_df["title"].apply(clean_title)
     posts_df["age"] = age_gender.apply(lambda x: x[0] if x is not None else None)
     posts_df["gender"] = age_gender.apply(lambda x: x[1] if x is not None else None)
@@ -76,11 +83,18 @@ def main(args):
             "parent_id",
             "link_id",
             "id",
+            "created_utc"
         ]
     ]
+    comments_df = comments_df.drop_duplicates(subset=["id"])
+    comments_df = comments_df[comments_df['created_utc'] >= 1388534400]
+    comments_df["body"] = comments_df["body"].str.replace("\n", " ")
+    comments_df["body"] = comments_df["body"].str.replace("\r", " ")
+    comments_df["body"] = comments_df["body"].fillna("")
     comments_df = comments_df[comments_df.author != "AutoModerator"]
     comments_df["clean_link_id"] = comments_df["link_id"].apply(lambda x: x[3:])
     comments_df["rating"] = comments_df["body"].apply(extract_rating)
+    comments_df = comments_df.set_index("id")
 
     posts_df["average_rating"] = comments_df.groupby("clean_link_id").rating.agg("mean")
     print("Writing outputs to:\n\t{}\n\t{}".format(args.posts_outfile, args.comments_outfile))

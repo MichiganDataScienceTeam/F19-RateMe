@@ -18,12 +18,12 @@ if __name__ == "__main__":
         "--posts",
         action="store",
         default="../data/posts.csv",
-        help="path to posts dictionary pickle file",
+        help="path to posts csv file",
     )
     parser.add_argument(
         "--comments",
         action="store",
         default="../data/comments.csv",
-        help="path to comments dictionary pickle file",
+        help="path to comments csv file",
     )
     main(parser.parse_args())
